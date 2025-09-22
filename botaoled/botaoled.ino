@@ -29,6 +29,7 @@ AdafruitIO_Feed *botaoLED = io.feed("botaoled");
 
 //Definição dos feeds 
 AdafruitIO_Feed *botaoalarme = io.feed("botaoalarme");
+AdafruitIO_Feed *distanciaultrassom = io.feed("distanciaultrassom");
 
 // Define o pino do LED
 #define LED_PIN 14
@@ -114,8 +115,13 @@ void loop() {
 
   distancia = sonar.ping_cm();
   Serial.print("Distancia lida: ");
-  Serial.println(distancia)
+  Serial.println(distancia);
   Serial.print(" cm");
+
+  if(distancia !=0){
+    //só envia distancias válidas
+  distanciaultrassom -> save(distancia);
+  }
 
   //Ativação e desativação do alarme
   if(alarmeAtivo && distancia > 0 && distancia < LIMITE_DISTANCIA){
@@ -124,6 +130,8 @@ void loop() {
   else{
     desligarAlarme();
   }
+
+  delay(3000); //Inervalo ideal para o adafruit 
 
 
 }
